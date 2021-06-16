@@ -19,7 +19,10 @@ class Student:
             summa += sum(self.grades[key])
             kol += len(self.grades[key])
 
-        sred = summa / kol
+        if kol > 0:
+            sred = summa / kol
+        else:
+            sred = 0
 
         return 'Имя: ' + self.name + '\n' + 'Фамилия: ' + self.surname + \
                '\n' + 'Средняя оценка за домашние задания: ' + str(round(sred, 1)) + \
@@ -36,6 +39,36 @@ class Student:
                 lecturer.grades[course] = [grade]
         else:
             return 'Ошибка'
+
+    def compare(self, other_student):
+        """Сравнение лекторов по оценкам студентов"""
+
+        summa1 = 0
+        kol1 = 0
+        for key in self.grades:
+            summa1 += sum(self.grades[key])
+            kol1 += len(self.grades[key])
+
+        if kol1 > 0:
+            sred1 = summa1 / kol1
+        else:
+            sred1 = 0
+
+        summa2 = 0
+        kol2 = 0
+
+        for key in other_student.grades:
+            summa2 += sum(other_student.grades[key])
+            kol2 += len(other_student.grades[key])
+        if kol2 > 0:
+            sred2 = summa2 / kol2
+        else:
+            sred2 = 0
+
+        if sred1 > sred2:
+            return self
+        else:
+            return other_student
 
 
 class Mentor:
@@ -67,7 +100,10 @@ class Lecturer(Mentor):
             summa += sum(self.grades[key])
             kol += len(self.grades[key])
 
-        sred = summa/kol
+        if kol > 0:
+            sred = summa/kol
+        else:
+            sred = 0
 
         return 'Имя: ' + self.name + '\n' + 'Фамилия: ' + self.surname + \
                '\n' + 'Средняя оценка за лекции: ' + str(round(sred, 1))
@@ -142,36 +178,38 @@ def lector_grades(lector_list, course):
     return str(round(sred, 1))
 
 
-best_student = Student('Ruoy', 'Eman', 'your_gender')
-best_student.courses_in_progress += ['Python']
+# Создаем по 2 экземпляра каждого класса
+first_student = Student('Alexander', 'Medvedev', 'Male')
+second_student = Student('Valentina', 'Medvedeva', 'Female')
+first_reviewer = Reviewer('Alexander', 'Bardin')
+second_reviewer = Reviewer('Sergey', 'Rozhnev')
+first_lector = Lecturer('Oleg', 'Bulygin')
+second_lector = Lecturer('Andrey', 'Aseev')
 
-cool_mentor = Reviewer('Some', 'Buddy')
-cool_mentor.courses_attached += ['Python']
-
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 10)
-cool_mentor.rate_hw(best_student, 'Python', 2)
-
-lect = Lecturer('Some', 'Lector')
-lect.courses_attached += ['Python']
-
-best_student.rate_hw(lect, 'Python', 10)
-best_student.rate_hw(lect, 'Python', 10)
-best_student.rate_hw(lect, 'Python', 5)
-
-second_lector = Lecturer('Other', 'Lector')
+# Используем все методы классов
+first_student.courses_in_progress += ['Python']
+first_student.finished_courses += ['Java']
+second_student.courses_in_progress += ['Python']
+second_student.courses_in_progress += ['Java']
+first_lector.courses_attached += ['Python']
 second_lector.courses_attached += ['Java']
+first_reviewer.courses_attached += ['Python']
+second_reviewer.courses_attached += ['Python']
+second_reviewer.courses_attached += ['Java']
+first_reviewer.rate_hw(first_student, 'Python', 10)
+first_reviewer.rate_hw(second_student, 'Python', 8)
+second_reviewer.rate_hw(second_student, 'Java', 2)
+first_student.rate_hw(first_lector, 'Python', 10)
+first_student.rate_hw(first_lector, 'Python', 8)
+second_student.rate_hw(second_lector, 'Java', 8)
+second_student.rate_hw(second_lector, 'Java', 6)
 
-best_student.courses_in_progress += ['Java']
-best_student.rate_hw(second_lector, 'Java', 9)
-best_student.rate_hw(second_lector, 'Java', 9)
-best_student.rate_hw(second_lector, 'Java', 9)
-
-print(best_student.grades)
-print(lect.grades)
-print(cool_mentor)
-print(lect)
-print(best_student)
-print(lect.compare(second_lector))
-print(student_grades([best_student], 'Python'))
-print(lector_grades([second_lector], 'Java'))
+# Выводим информацию о каждом экземпляре
+print('Информация о первом студенте:\n', first_student, sep='')
+print('Информация о втором студенте:\n', second_student, sep='')
+print('Информация о первом проверяющем:\n', first_reviewer, sep='')
+print('Информация о втором проверяющем:\n', second_reviewer, sep='')
+print('Информация о первом лекторе:\n', first_lector, sep='')
+print('Информация о втором лекторе:\n', second_lector, sep='')
+print('Выше оценки у лектора:\n', first_lector.compare(second_lector), sep='')
+print('Выше оценки у студента:\n', first_student.compare(second_student), sep='')
