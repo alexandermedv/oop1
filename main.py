@@ -158,9 +158,13 @@ def student_grades(student_list, course):
     summa = 0
     kol = 0
     for student in student_list:
-        summa += sum(student.grades[course])
-        kol += len(student.grades[course])
-    sred = summa / kol
+        if course in student.grades:
+            summa += sum(student.grades[course])
+            kol += len(student.grades[course])
+    if kol > 0:
+        sred = summa / kol
+    else:
+        sred = 0
 
     return str(round(sred, 1))
 
@@ -171,9 +175,13 @@ def lector_grades(lector_list, course):
     summa = 0
     kol = 0
     for lector in lector_list:
-        summa += sum(lector.grades[course])
-        kol += len(lector.grades[course])
-    sred = summa / kol
+        if course in lector.grades:
+            summa += sum(lector.grades[course])
+            kol += len(lector.grades[course])
+    if kol > 0:
+        sred = summa / kol
+    else:
+        sred = 0
 
     return str(round(sred, 1))
 
@@ -205,11 +213,14 @@ second_student.rate_hw(second_lector, 'Java', 8)
 second_student.rate_hw(second_lector, 'Java', 6)
 
 # Выводим информацию о каждом экземпляре
-print('Информация о первом студенте:\n', first_student, sep='')
-print('Информация о втором студенте:\n', second_student, sep='')
-print('Информация о первом проверяющем:\n', first_reviewer, sep='')
-print('Информация о втором проверяющем:\n', second_reviewer, sep='')
-print('Информация о первом лекторе:\n', first_lector, sep='')
-print('Информация о втором лекторе:\n', second_lector, sep='')
-print('Выше оценки у лектора:\n', first_lector.compare(second_lector), sep='')
-print('Выше оценки у студента:\n', first_student.compare(second_student), sep='')
+print('Информация о первом студенте:\n', first_student, '\n', sep='')
+print('Информация о втором студенте:\n', second_student, '\n', sep='')
+print('Информация о первом проверяющем:\n', first_reviewer, '\n', sep='')
+print('Информация о втором проверяющем:\n', second_reviewer, '\n', sep='')
+print('Информация о первом лекторе:\n', first_lector, '\n', sep='')
+print('Информация о втором лекторе:\n', second_lector, '\n', sep='')
+print('Выше оценки у лектора:\n', first_lector.compare(second_lector), '\n', sep='')
+print('Выше оценки у студента:\n', first_student.compare(second_student), '\n', sep='')
+print('Средняя оценка студентов по курсу Python:', student_grades([first_student, second_student], 'Python'), '\n')
+print('Средняя оценка лекторов по курсу Python:', lector_grades([first_lector, second_lector], 'Python'), '\n')
+print('Все задачи успешно выполнены')
